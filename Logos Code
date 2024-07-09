@@ -1,0 +1,136 @@
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f2f2f2;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.logos {
+  overflow: hidden;
+  padding: 60px 0;
+  background: {{section.settings.colorBackground}};
+  white-space: nowrap;
+  position: relative;
+}
+
+.logos:before,
+.logos:after {
+  position: absolute;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  content: "";
+  z-index: 2;
+}
+
+.logos:before {
+  left: 0;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0), {{section.settings.sideColor}});
+}
+
+.logos:after {
+  right: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), {{section.settings.sideColor}});
+}
+
+.logos:hover .logos-slide {
+  animation-play-state: paused;
+}
+
+.logos-slide {
+  display: inline-block;
+  animation: {{section.settings.adjust_speed}}s slide infinite linear;
+}
+
+.logos-slide img {
+  height: 50px;
+  margin: 0 40px;
+}
+</style>
+ <div class="logos">
+      <div class="logos-slide">
+        
+        {%- for block in section.blocks -%}
+        {% if block.settings.new_logo != blank %}
+        <img src=" {{ block.settings.new_logo |  image_url }} " />
+         {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <script>
+      var copy = document.querySelector(".logos-slide").cloneNode(true);
+      document.querySelector(".logos").appendChild(copy);
+    </script>
+
+{% schema %}
+{
+  "name": "Marquee Logos",
+  "settings": [
+    {
+      "type": "color",
+      "id": "colorBackground",
+      "label": "Background color",
+      "default": "#000"
+    },
+    {
+      "type": "color",
+      "id": "sideColor",
+      "label": "Side Color",
+      "default": "#fff"
+    },
+  
+    {
+  "type": "number",
+  "id": "adjust_speed",
+  "label": "Adjust Speed",
+  "default": 30
+}
+  
+  ],
+    "blocks": [
+    {
+      "type": "text",
+      "name": "Logo",
+      "limit": 20,
+      "settings": [
+         {
+          "type": "image_picker",
+          "id": "new_logo",
+          "label": "Image"
+         
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Logos",
+      "blocks": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
